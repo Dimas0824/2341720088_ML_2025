@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hasil Prediksi</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+    <div class="container">
+        <div class="result-header">
+            <div class="result-icon">{% if label == 'day' %}☀️{% else %}🌙{% endif %}</div>
+            <h1 class="result-title">Hasil Prediksi</h1>
+            <p class="result-subtitle">Analisis gambar telah selesai</p>
+        </div>
+
+        <div class="prediction-card">
+            <div class="prediction-label">{{ label }}</div>
+            <div class="confidence-section">
+                <div class="confidence-label">Model Confidence</div>
+                <div class="confidence-value">{{ confidence }}%</div>
+                <div class="confidence-bar-container">
+                    <div class="confidence-bar" id="confidenceBar"></div>
+                </div>
+                <div class="confidence-description">
+                    {% if confidence >= 90 %}
+                    Sangat Yakin - Prediksi sangat akurat
+                    {% elif confidence >= 75 %}
+                    Yakin - Prediksi dapat diandalkan
+                    {% elif confidence >= 60 %}
+                    Cukup Yakin - Prediksi cukup akurat
+                    {% else %}
+                    Kurang Yakin - Pertimbangkan ulang
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="action-buttons">
+            <a href="/" class="button button-primary">Prediksi Lagi</a>
+        </div>
+    </div>
+
+    <script>
+        (function () {
+            var confidenceBar = document.getElementById('confidenceBar');
+            var confidenceValue = parseFloat('{{ confidence }}');
+
+            if (isNaN(confidenceValue) || confidenceValue < 0) {
+                confidenceValue = 0;
+            } else if (confidenceValue > 100) {
+                confidenceValue = 100;
+            }
+
+            setTimeout(function () {
+                confidenceBar.style.width = confidenceValue + '%';
+            }, 100);
+        })();
+    </script>
+</body>
+
+</html>
