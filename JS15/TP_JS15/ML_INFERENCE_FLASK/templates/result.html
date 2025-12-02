@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hasil Prediksi Risiko</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+    <div class="container">
+        <h1>📊 Hasil Prediksi Risiko</h1>
+        {% if error %}
+        <div class="error-message">{{ error }}</div>
+        {% else %}
+        <div class="risk-score">{{ result.risk_score }}%</div>
+        <div class="result-card">
+            <div class="result-item">
+                <div class="result-label">Tanggal Transaksi</div>
+                <div class="result-value">{{ result.tanggal }}</div>
+            </div>
+            <div class="result-item">
+                <div class="result-label">Nominal</div>
+                <div class="result-value">Rp {{ result.nominal }}</div>
+            </div>
+            <div class="result-item">
+                <div class="result-label">Target Type</div>
+                <div class="result-value">{{ result.target_type }}</div>
+            </div>
+            {% if result.rt_number %}
+            <div class="result-item">
+                <div class="result-label">RT Number</div>
+                <div class="result-value">{{ result.rt_number }}</div>
+            </div>
+            {% endif %}
+            <div class="result-item">
+                <div class="result-label">Status Risiko</div>
+                <div class="status-badge {{
+                    'status-success' if result.risk_category.status == 'RENDAH' else
+                    'status-warning' if result.risk_category.status == 'SEDANG' else
+                    'status-danger' if result.risk_category.status in ['TINGGI', 'SANGAT TINGGI'] else ''
+                }}">{{ result.risk_category.emoji }} Risiko {{ result.risk_category.status }}</div>
+            </div>
+        </div>
+        <div class="recommendation">
+            <h3>💡 Rekomendasi Tindakan</h3>
+            <ul>
+                {% for tindakan in result.risk_category.tindakan %}
+                <li>{{ tindakan }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+        <a href="/" class="back-link">← Kembali ke Form</a>
+    </div>
+
+    <!-- Tidak perlu JS, semua data dari backend Flask -->
+</body>
+
+</html>

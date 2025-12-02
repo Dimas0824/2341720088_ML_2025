@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediksi Risiko Pembayaran</title>
+    <link rel="stylesheet" href="static/style.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1>🔍 Prediksi Risiko Keterlambatan Pembayaran</h1>
+        <form action="/predict" method="post">
+            <div class="form-group">
+                <label for="tanggal">Tanggal Transaksi</label>
+                <input type="date" id="tanggal" name="tanggal" required>
+            </div>
+
+            <div class="form-group">
+                <label for="nominal">Nominal (Rp)</label>
+                <input type="number" id="nominal" name="nominal" placeholder="Masukkan nominal" required>
+            </div>
+
+            <div class="form-group">
+                <label for="target_type">Target Type</label>
+                <select id="target_type" name="target_type" required onchange="toggleRT()">
+                    <option value="broadcast">Broadcast</option>
+                    <option value="rt_tertentu">RT Tertentu</option>
+                </select>
+            </div>
+
+            <div class="form-group" id="rt_number_div">
+                <label for="rt_number">RT Number</label>
+                <input type="text" id="rt_number" name="rt_number" placeholder="Masukkan nomor RT">
+            </div>
+
+            <button type="submit">Prediksi Sekarang</button>
+        </form>
+    </div>
+
+    <script>
+        function toggleRT() {
+            const targetType = document.getElementById('target_type').value;
+            const rtDiv = document.getElementById('rt_number_div');
+            if (targetType === 'rt_tertentu') {
+                rtDiv.classList.add('show');
+                document.getElementById('rt_number').required = true;
+            } else {
+                rtDiv.classList.remove('show');
+                document.getElementById('rt_number').required = false;
+            }
+        }
+
+        // Tidak perlu JS submit custom, biarkan form dikirim ke /predict
+    </script>
+</body>
+
+</html>
